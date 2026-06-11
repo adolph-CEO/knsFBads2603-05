@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>康乃心 FB 廣告成效分析｜2026 Q1–Q2</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1a2e;
+    --ink-mid: #4a4a6a;
+    --ink-soft: #8888aa;
+    --bg: #f7f7fb;
+    --surface: #ffffff;
+    --border: rgba(100,100,160,0.12);
+    --teal: #0f7a6e;
+    --teal-light: #e6f5f3;
+    --teal-mid: #1da898;
+    --blue: #2357a8;
+    --blue-light: #e8f0fc;
+    --amber: #b56a10;
+    --amber-light: #fef3e4;
+    --red: #c0392b;
+    --red-light: #fdecea;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.75;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: #fff;
+    padding: 48px 40px 40px;
+  }
+  .header-inner { max-width: 960px; margin: 0 auto; }
+  .report-eyebrow {
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--teal-mid);
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+  header h1 {
+    font-size: clamp(22px, 4vw, 32px);
+    font-weight: 600;
+    line-height: 1.3;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .header-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,.52);
+    font-weight: 300;
+  }
+
+  /* ── MAIN ── */
+  main { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* ── KPI GRID ── */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-bottom: 40px;
+  }
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+  }
+  .kpi-label {
+    font-size: 11px;
+    color: var(--ink-soft);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .kpi-value {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .kpi-sub {
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-top: 5px;
+  }
+  .kpi-accent { border-top: 3px solid var(--teal-mid); }
+
+  /* ── SECTION ── */
+  .section { margin-bottom: 48px; }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-header h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .section-header p {
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+
+  /* ── CHART CARD ── */
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .chart-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-mid);
+    margin-bottom: 4px;
+  }
+  .chart-desc {
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-bottom: 20px;
+  }
+  .chart-wrap { position: relative; width: 100%; }
+
+  /* ── INSIGHT CARDS ── */
+  .insight-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  @media (max-width: 640px) { .insight-grid { grid-template-columns: 1fr; } }
+
+  .insight-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .insight-card.good { border-left: 4px solid var(--teal); }
+  .insight-card.mid  { border-left: 4px solid var(--blue); }
+  .insight-card.warn { border-left: 4px solid var(--amber); }
+  .insight-card.bad  { border-left: 4px solid var(--red); }
+
+  .insight-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .insight-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    flex: 1;
+    min-width: 0;
+  }
+  .insight-cpa {
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .good .insight-cpa { color: var(--teal); }
+  .mid  .insight-cpa { color: var(--blue); }
+  .warn .insight-cpa { color: var(--amber); }
+  .bad  .insight-cpa { color: var(--red); }
+
+  .insight-stats {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .stat-pill {
+    font-size: 11px;
+    color: var(--ink-mid);
+    background: var(--bg);
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+  .insight-body {
+    font-size: 12px;
+    color: var(--ink-mid);
+    line-height: 1.7;
+  }
+
+  /* ── BADGE ── */
+  .badge {
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 20px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .badge-success { background: var(--teal-light); color: var(--teal); }
+  .badge-info    { background: var(--blue-light); color: var(--blue); }
+  .badge-warning { background: var(--amber-light); color: var(--amber); }
+  .badge-danger  { background: var(--red-light); color: var(--red); }
+
+  /* ── STRATEGY TABLE ── */
+  .strategy-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--surface);
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .strategy-table thead tr {
+    background: var(--ink);
+    color: #fff;
+  }
+  .strategy-table thead th {
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: .04em;
+  }
+  .strategy-table tbody tr:nth-child(even) { background: var(--bg); }
+  .strategy-table tbody td {
+    padding: 12px 16px;
+    color: var(--ink-mid);
+    border-top: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .strategy-table tbody td:first-child {
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  /* ── LEGEND ── */
+  .legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+    font-size: 12px;
+    color: var(--ink-mid);
+  }
+  .legend-item { display: flex; align-items: center; gap: 5px; }
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* ── PERIOD DIVIDER ── */
+  .period-divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 56px 0 40px;
+  }
+  .period-divider-line { flex: 1; height: 1px; background: var(--border); }
+  .period-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 6px 18px 6px 10px;
+    white-space: nowrap;
+  }
+  .period-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .period-label span { font-size: 12px; font-weight: 500; color: var(--ink-mid); }
+
+  /* ── COMPARE ROW ── */
+  .compare-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+  .compare-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+  }
+  .compare-label { font-size: 11px; color: var(--ink-soft); letter-spacing:.05em; text-transform:uppercase; margin-bottom:4px; }
+  .compare-value { font-size: 20px; font-weight: 600; color: var(--ink); line-height:1.1; }
+  .compare-delta {
+    font-size: 11px;
+    margin-top: 4px;
+    font-weight: 500;
+  }
+  .delta-up   { color: var(--teal); }
+  .delta-down { color: var(--red); }
+  .delta-neu  { color: var(--ink-soft); }
+
+  /* ── SUMMARY BOX ── */
+  .summary-box {
+    background: var(--ink);
+    color: #fff;
+    border-radius: var(--radius);
+    padding: 28px 28px 24px;
+    margin-bottom: 16px;
+  }
+  .summary-box h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--teal-mid);
+    margin-bottom: 16px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+  .summary-items { display: flex; flex-direction: column; gap: 10px; }
+  .summary-item {
+    display: flex;
+    gap: 12px;
+    font-size: 13px;
+    line-height: 1.65;
+    color: rgba(255,255,255,.82);
+  }
+  .summary-num {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--teal-mid);
+    background: rgba(29,168,152,.15);
+    border-radius: 4px;
+    padding: 2px 7px;
+    height: fit-content;
+    margin-top: 2px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .action-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 640px) { .action-grid { grid-template-columns: 1fr; } }
+  .action-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+  }
+  .action-priority {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    margin-bottom: 6px;
+  }
+  .p1 { color: var(--teal); }
+  .p2 { color: var(--blue); }
+  .p3 { color: var(--amber); }
+  .action-title { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+  .action-body { font-size: 12px; color: var(--ink-mid); line-height: 1.65; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--ink-soft);
+    padding: 32px 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  @media (max-width: 640px) {
+    header { padding: 32px 20px 28px; }
+    main { padding: 28px 16px 60px; }
+    .kpi-value { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <p class="report-eyebrow">康乃心婦產科暨醫學美學診所</p>
+    <h1>Facebook 廣告成效分析報告</h1>
+    <p class="header-sub">2026年3月1日 – 5月31日　近3個月分析 + 5月單月分析 + 總結建議</p>
+  </div>
+</header>
+
+<main>
+
+  <!-- PERIOD LABEL: 3-month -->
+  <div class="period-divider">
+    <div class="period-divider-line"></div>
+    <div class="period-label">
+      <span class="period-dot" style="background:#1da898"></span>
+      <span>近3個月分析　2026/03 – 2026/05</span>
+    </div>
+    <div class="period-divider-line"></div>
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-grid">
+    <div class="kpi-card kpi-accent">
+      <p class="kpi-label">總花費</p>
+      <p class="kpi-value">NT$95,370</p>
+      <p class="kpi-sub">本期所有活動</p>
+    </div>
+    <div class="kpi-card">
+      <p class="kpi-label">總觸及人數</p>
+      <p class="kpi-value">240,521</p>
+      <p class="kpi-sub">不重複觸及</p>
+    </div>
+    <div class="kpi-card">
+      <p class="kpi-label">總曝光次數</p>
+      <p class="kpi-value">520,544</p>
+      <p class="kpi-sub">含重複觸及</p>
+    </div>
+    <div class="kpi-card">
+      <p class="kpi-label">私訊諮詢總量</p>
+      <p class="kpi-value">246 次</p>
+      <p class="kpi-sub">messaging started</p>
+    </div>
+    <div class="kpi-card">
+      <p class="kpi-label">平均每次諮詢成本</p>
+      <p class="kpi-value">NT$137</p>
+      <p class="kpi-sub">諮詢目標活動</p>
+    </div>
+  </div>
+
+  <!-- CHART 1 -->
+  <div class="section">
+    <div class="section-header">
+      <h2>各廣告每次私訊諮詢成本（CPA）</h2>
+      <p>越低越好</p>
+    </div>
+    <div class="chart-card">
+      <p class="chart-title">私訊諮詢廣告 CPA 排名</p>
+      <p class="chart-desc">以每次帶來一筆私訊諮詢所需花費排序，只計入成果指標為「私訊諮詢」的廣告活動</p>
+      <div class="legend">
+        <div class="legend-item"><span class="legend-dot" style="background:#0f7a6e"></span>NT$1–80（高效）</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#2357a8"></span>NT$81–150（良好）</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#b56a10"></span>NT$151–250（待改善）</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#c0392b"></span>NT$251+（低效）</div>
+      </div>
+      <div class="chart-wrap" style="height: 560px;">
+        <canvas id="cpaChart" role="img" aria-label="各廣告活動每次諮詢成本排名長條圖">各廣告 CPA 排名</canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHART 2 -->
+  <div class="section">
+    <div class="section-header">
+      <h2>花費 vs 諮詢成果對比</h2>
+      <p>氣泡大小代表成果數量</p>
+    </div>
+    <div class="chart-card">
+      <p class="chart-title">主要廣告活動效益分佈</p>
+      <p class="chart-desc">理想位置：右上方（高花費高成果）或左上方（低花費高成果）；左下角代表高花費低回報</p>
+      <div class="chart-wrap" style="height: 320px;">
+        <canvas id="bubbleChart" role="img" aria-label="廣告花費與諮詢成果氣泡圖">花費與成果關係圖</canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- INSIGHTS -->
+  <div class="section">
+    <div class="section-header">
+      <h2>廣告成效分析</h2>
+      <p>依成本效益分類</p>
+    </div>
+
+    <div class="insight-grid">
+
+      <div class="insight-card good">
+        <div class="insight-meta">
+          <span class="badge badge-success">最佳</span>
+          <span class="insight-name">「鬆緊喜好」私密話題</span>
+          <span class="insight-cpa">CPA NT$28</span>
+        </div>
+        <div class="insight-stats">
+          <span class="stat-pill">花費 NT$340</span>
+          <span class="stat-pill">諮詢 12 次</span>
+          <span class="stat-pill">CTR 6.2%</span>
+          <span class="stat-pill">CPC NT$6.4</span>
+        </div>
+        <p class="insight-body">本期花費效益最高的貼文之一。輕鬆有話題感的語氣切入私密健康，觸發好奇心，CTR 和轉換率同時優秀。「敢說又不羞辱」的私密話題方向確認有效，建議持續擴張測試。</p>
+      </div>
+
+      <div class="insight-card good">
+        <div class="insight-meta">
+          <span class="badge badge-success">最佳</span>
+          <span class="insight-name">三月女王月節慶</span>
+          <span class="insight-cpa">CPA NT$41.5</span>
+        </div>
+        <div class="insight-stats">
+          <span class="stat-pill">花費 NT$997</span>
+          <span class="stat-pill">諮詢 24 次</span>
+          <span class="stat-pill">CTR 3.0%</span>
+          <span class="stat-pill">CPC NT$8.3</span>
+        </div>
+        <p class="insight-body">節慶＋女性身份認同的組合帶來高共鳴。花費不高卻帶來最多諮詢之一，CTR、CPC、CPA 三指標全部優秀。節慶借勢必須直接關連女性健康，這支廣告做到了，是同類型最佳範例。</p>
+      </div>
+
+      <div class="insight-card good">
+        <div class="insight-meta">
+          <span class="badge badge-success">高效</span>
+          <span class="insight-name">產前情感敘事</span>
+          <span class="insight-cpa">CPA NT$61.6</span>
+        </div>
+        <div class="insight-stats">
+          <span class="stat-pill">花費 NT$1,663</span>
+          <span class="stat-pill">諮詢 27 次</span>
+          <span class="stat-pill">CTR 1.97%</span>
+        </div>
+        <p class="insight-body">「在孩子來到世上之前，對他的模樣只停留在想像」——情感故事切入產科照護，觸及孕產族群效果清晰。CPA 雖非最低，但受眾品質高，與品牌定位最吻合，建議持續生產此類內容。</p>
+      </div>
+
+      <div class="insight-card mid">
+        <div class="insight-meta">
+          <span class="badge badge-info">大量曝光</span>
+          <span class="insight-name">00-Reel 影片廣告</span>
+          <span class="insight-cpa">CPA NT$126.7</span>
+        </div>
+        <div class="insight-stats">
+          <span class="stat-pill">花費 NT$10,138</span>
+          <span class="stat-pill">諮詢 80 次</span>
+          <span class="stat-pill">CTR 2.18%</span>
+        </div>
+        <p class="insight-body">花費佔本期總預算 10.6%，是絕對成果數最多的廣告。但以 CPA 計算效率僅中等。Reel 適合品牌認知曝光，建議保留但調整 KPI，改以影片觀看率為主目標，不以諮詢轉換評估。</p>
+      </div>
+
+      <div class="insight-card warn">
+        <div class="insight-meta">
+          <span class="badge badge-warning">低效</span>
+          <span class="insight-name">「有些變化不該默默忍受」系列</span>
+          <span class="insight-cpa">CPA NT$214–312</span>
+        </div>
+        <div class="insight-stats">
+          <span class="stat-pill">兩支合計 NT$5,146</span>
+          <span class="stat-pill">諮詢 19 次</span>
+        </div>
+        <p class="insight-body">兩支主題近似的廣告重疊投放，CPA 均偏高。「被動忍受」語氣停在同理，缺乏行動召喚。建議改為主動解決語氣：「漏尿其實 3–5 次療程就能改善」，並整合成一支，避免預算稀釋。</p>
+      </div>
+
+      <div class="insight-card bad">
+        <div class="insight-meta">
+          <span class="badge badge-danger">低效</span>
+          <span class="insight-name">棒球應援 / 母親節禮物推薦</span>
+          <span class="insight-cpa">CPA NT$329–536</span>
+        </div>
+        <div class="insight-stats">
+          <span class="stat-pill">棒球 NT$1,071 / 諮詢 2 次</span>
+          <span class="stat-pill">母親節 NT$987 / 諮詢 3 次</span>
+        </div>
+        <p class="insight-body">非女性健康直接相關的借勢內容，對診所諮詢轉換幾乎無效。母親節「禮物推薦」定位偏功能性，缺乏情感認同。建議此類活動停止設定諮詢目標，改為純互動 / 小預算品牌溫度貼文。</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- INTERACTION SECTION -->
+  <div class="section">
+    <div class="section-header">
+      <h2>互動型廣告觀察</h2>
+      <p>目標為 post engagement / interaction</p>
+    </div>
+    <div class="insight-grid">
+      <div class="insight-card good">
+        <div class="insight-meta">
+          <span class="badge badge-success">再行銷潛力</span>
+          <span class="insight-name">「實在太有感」見證貼文</span>
+          <span class="insight-cpa">互動成本 NT$4.4</span>
+        </div>
+        <div class="insight-stats">
+          <span class="stat-pill">花費 NT$952</span>
+          <span class="stat-pill">互動 214 次</span>
+        </div>
+        <p class="insight-body">互動成本極低，見證型內容產生高度共鳴。建議對這批有互動的受眾做再行銷（retargeting），以私訊諮詢為目標做第二次觸達，預期可帶來高品質轉換。</p>
+      </div>
+      <div class="insight-card warn">
+        <div class="insight-meta">
+          <span class="badge badge-warning">品牌溫度</span>
+          <span class="insight-name">「臉垮掉」「煙燻妝熊貓」趣味貼文</span>
+          <span class="insight-cpa">CTR 0.02–0.03%</span>
+        </div>
+        <div class="insight-stats">
+          <span class="stat-pill">兩支合計 NT$3,343</span>
+          <span class="stat-pill">互動 114 次</span>
+        </div>
+        <p class="insight-body">觸及曝光量大，但連結點擊率幾乎為零，完全無法引導行動。適合作為純品牌溫度貼文（有機發文為主），不建議掛諮詢 CTA 投放廣告預算。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STRATEGY (3-month) -->
+  <div class="section">
+    <div class="section-header">
+      <h2>近3個月廣告策略建議</h2>
+    </div>
+    <table class="strategy-table">
+      <thead>
+        <tr>
+          <th>方向</th>
+          <th>具體行動</th>
+          <th>預期效果</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>加碼私密話題</td>
+          <td>持續測試「敢說、不尷尬」語氣的私密健康貼文，主題涵蓋閨蜜電波、私密雷射、私密保養美學</td>
+          <td>CPA 低、CTR 高，是本期最具規模化潛力的方向</td>
+        </tr>
+        <tr>
+          <td>強化情感敘事</td>
+          <td>生產孕產、產後修復、熟齡照護的真實情境故事；優先使用患者視角，不是療程介紹</td>
+          <td>觸及高品質受眾，強化品牌「最懂妳」定位</td>
+        </tr>
+        <tr>
+          <td>重寫被動系列</td>
+          <td>「有些變化不該忍受」改為「漏尿 3–5 次可改善」等主動解決語氣；兩支整合為一支減少預算稀釋</td>
+          <td>預期可將 CPA 從 NT$270 降至 NT$150 以內</td>
+        </tr>
+        <tr>
+          <td>Reel 目標調整</td>
+          <td>改設影片觀看率 / 品牌認知為 KPI，搭配再行銷承接有觀看的受眾</td>
+          <td>保留曝光效益，同時提升後端諮詢轉換品質</td>
+        </tr>
+        <tr>
+          <td>互動再行銷</td>
+          <td>對「實在太有感」等高互動貼文受眾建立自訂廣告受眾，投放諮詢目標廣告</td>
+          <td>已有品牌認知的暖受眾，轉換成本預期低於冷受眾 30–50%</td>
+        </tr>
+        <tr>
+          <td>降低借勢預算</td>
+          <td>節慶 / 時事借勢貼文改以有機發文為主；若投廣告僅設互動目標，控制在 NT$300 以內</td>
+          <td>釋放預算給高效主題，整體 CPA 下降</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════ MAY SECTION ═══════════════════════════════════ -->
+  <div class="period-divider">
+    <div class="period-divider-line"></div>
+    <div class="period-label">
+      <span class="period-dot" style="background:#2357a8"></span>
+      <span>2026/05 單月分析　22組活躍廣告</span>
+    </div>
+    <div class="period-divider-line"></div>
+  </div>
+
+  <!-- MAY KPI -->
+  <div class="compare-row">
+    <div class="compare-card">
+      <p class="compare-label">5月花費</p>
+      <p class="compare-value">NT$35,955</p>
+      <p class="compare-delta delta-neu">佔3個月總預算 37.7%</p>
+    </div>
+    <div class="compare-card">
+      <p class="compare-label">5月觸及</p>
+      <p class="compare-value">119,075</p>
+      <p class="compare-delta delta-neu">佔3個月觸及 49.5%</p>
+    </div>
+    <div class="compare-card">
+      <p class="compare-label">5月諮詢量</p>
+      <p class="compare-value">182 次</p>
+      <p class="compare-delta delta-up">↑ 佔3個月總量 74%</p>
+    </div>
+    <div class="compare-card">
+      <p class="compare-label">5月平均 CPA</p>
+      <p class="compare-value">NT$120.7</p>
+      <p class="compare-delta delta-up">↓ 較3個月均值改善 11.9%</p>
+    </div>
+    <div class="compare-card">
+      <p class="compare-label">5月活躍廣告數</p>
+      <p class="compare-value">22 組</p>
+      <p class="compare-delta delta-neu">15 組以諮詢為目標</p>
+    </div>
+  </div>
+
+  <!-- MAY CHART -->
+  <div class="section">
+    <div class="section-header">
+      <h2>2026/05 廣告 CPA 排名</h2>
+      <p>僅計諮詢目標廣告</p>
+    </div>
+    <div class="chart-card">
+      <p class="chart-title">5月各廣告每次私訊諮詢成本</p>
+      <p class="chart-desc">5月沿用3個月中較有效的廣告組合，並新增多支療程主題貼文</p>
+      <div class="legend">
+        <div class="legend-item"><span class="legend-dot" style="background:#0f7a6e"></span>NT$1–80（高效）</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#2357a8"></span>NT$81–150（良好）</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#b56a10"></span>NT$151–250（待改善）</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#c0392b"></span>NT$251+（低效）</div>
+      </div>
+      <div class="chart-wrap" style="height: 420px;">
+        <canvas id="mayCpaChart" role="img" aria-label="2026年5月各廣告每次諮詢成本排名">5月 CPA 排名圖</canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAY INSIGHTS -->
+  <div class="section">
+    <div class="section-header">
+      <h2>2026/05 重點觀察</h2>
+    </div>
+    <div class="insight-grid">
+
+      <div class="insight-card good">
+        <div class="insight-meta">
+          <span class="badge badge-success">5月最佳</span>
+          <span class="insight-name">「鬆緊喜好」私密話題</span>
+          <span class="insight-cpa">CPA NT$28.3</span>
+        </div>
+        <div class="insight-stats">
+          <span class="stat-pill">花費 NT$340</span>
+          <span class="stat-pill">諮詢 12 次</span>
+          <span class="stat-pill">CTR 6.2%</span>
+        </div>
+        <p class="insight-body">3個月中 CPA 最低的廣告之一，5月仍持續投放且表現穩定，驗證私密話題切入角度具持續效益，不是偶發性爆量。建議作為長青廣告繼續維持。</p>
+      </div>
+
+      <div class="insight-card good">
+        <div class="insight-meta">
+          <span class="badge badge-success">5月最佳</span>
+          <span class="insight-name">產前情感敘事</span>
+          <span class="insight-cpa">CPA NT$61.6</span>
+        </div>
+        <div class="insight-stats">
+          <span class="stat-pill">花費 NT$1,663</span>
+          <span class="stat-pill">諮詢 27 次</span>
+          <span class="stat-pill">CTR 1.97%</span>
+        </div>
+        <p class="insight-body">5月單月貢獻最多諮詢的單篇貼文（27次），遠超同花費級距的其他廣告。情感型孕產內容質量穩定，即便非節慶時段仍能持續轉換，是5月的主力廣告。</p>
+      </div>
+
+      <div class="insight-card mid">
+        <div class="insight-meta">
+          <span class="badge badge-info">量體最大</span>
+          <span class="insight-name">00-Reel 影片廣告</span>
+          <span class="insight-cpa">CPA NT$126.7</span>
+        </div>
+        <div class="insight-stats">
+          <span class="stat-pill">花費 NT$10,138</span>
+          <span class="stat-pill">諮詢 80 次</span>
+          <span class="stat-pill">佔5月花費 28.2%</span>
+        </div>
+        <p class="insight-body">5月花費最高，單月諮詢量也最多。但 CPA 偏高，且單一廣告佔預算比例達 28%，風險集中。建議在維持 Reel 曝光的同時，分散預算至 CPA 更低的貼文廣告，降低單點依賴。</p>
+      </div>
+
+      <div class="insight-card good">
+        <div class="insight-meta">
+          <span class="badge badge-success">新增有效</span>
+          <span class="insight-name">癌症零期篩查</span>
+          <span class="insight-cpa">CPA NT$124.9</span>
+        </div>
+        <div class="insight-stats">
+          <span class="stat-pill">花費 NT$1,624</span>
+          <span class="stat-pill">諮詢 13 次</span>
+          <span class="stat-pill">CTR 1.43%</span>
+        </div>
+        <p class="insight-body">5月新投放，以「零期癌症及早發現」切入預防醫學主題，CPA 落在合理範圍。印證預防醫學 / 健康管理角度可以有效引發諮詢意願，是3個月數據中未完整測試的方向，建議持續擴大測試。</p>
+      </div>
+
+      <div class="insight-card warn">
+        <div class="insight-meta">
+          <span class="badge badge-warning">低效持續</span>
+          <span class="insight-name">保養類貼文（多支）</span>
+          <span class="insight-cpa">CPA NT$432–467</span>
+        </div>
+        <div class="insight-stats">
+          <span class="stat-pill">3支合計 NT$1,346</span>
+          <span class="stat-pill">諮詢共 3 次</span>
+        </div>
+        <p class="insight-body">「保養天天擦還不夠」「半小時買一整年安心」「來了來了！」三支廣告CPA均破400。保養類話術對婦產科醫美的諮詢轉換幫助有限，5月仍在投放屬於預算浪費，建議立即停止或轉為互動目標。</p>
+      </div>
+
+      <div class="insight-card good">
+        <div class="insight-meta">
+          <span class="badge badge-success">互動高效</span>
+          <span class="insight-name">「實在太有感」見證 + 互動類貼文</span>
+          <span class="insight-cpa">互動成本 NT$4.4–32</span>
+        </div>
+        <div class="insight-stats">
+          <span class="stat-pill">5月互動廣告共 5 支</span>
+          <span class="stat-pill">互動合計 370 次</span>
+        </div>
+        <p class="insight-body">「實在太有感」見證每次互動僅 NT$4.4，「精緻女孩不忽略」NT$14。這批互動受眾5月已累積相當規模，是理想的再行銷素材庫。建議6月啟動再行銷策略，承接這批暖受眾。</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════ FINAL SUMMARY ═══════════════════════════════════ -->
+  <div class="period-divider">
+    <div class="period-divider-line"></div>
+    <div class="period-label">
+      <span class="period-dot" style="background:#c0392b"></span>
+      <span>總結建議　給下一階段的行動指南</span>
+    </div>
+    <div class="period-divider-line"></div>
+  </div>
+
+  <div class="summary-box">
+    <h3>核心發現 — 3個月趨勢確認</h3>
+    <div class="summary-items">
+      <div class="summary-item">
+        <span class="summary-num">發現 01</span>
+        <span>私密健康話題是康乃心廣告最強的差異化武器。「鬆緊喜好」單支廣告 CPA NT$28，CTR 6.2%，跨越3個月持續表現穩定，不是偶發。這個方向未被充分開發，目前只有少數幾支廣告，應當作核心內容方向擴張，而不是偶爾嘗試。</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-num">發現 02</span>
+        <span>5月整體 CPA（NT$120.7）比3個月均值（NT$136.9）改善 12%，說明廣告組合已朝正確方向優化。但 Reel 獨佔 28% 預算、三支保養類廣告仍在投放，說明低效廣告尚未被系統性停止，存在繼續改善空間。</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-num">發現 03</span>
+        <span>情感敘事型廣告（產前、見證）持續輸出穩定成效，且這類內容與康乃心「最懂妳」的品牌定位高度一致。5月產前貼文帶來最多諮詢（27次），再次確認孕產族群是高質量受眾，值得投入更多資源。</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-num">發現 04</span>
+        <span>互動型廣告5月累積了370次有效互動，但尚未進行再行銷。這批已接觸品牌的暖受眾是免費的轉換槓桿，6月應立即啟動 Custom Audience + 諮詢目標再行銷，預計可帶來比冷受眾低30–50%的 CPA。</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <h2>6月行動優先序</h2>
+    </div>
+    <div class="action-grid">
+      <div class="action-card">
+        <p class="action-priority p1">P1 立即執行</p>
+        <p class="action-title">停止低效廣告 + 釋放預算</p>
+        <p class="action-body">「保養天天擦」「半小時安心」「來了來了」等 CPA 破400的廣告立即暫停。合計可釋放約 NT$1,400 預算，直接挹注私密健康和情感敘事廣告。</p>
+      </div>
+      <div class="action-card">
+        <p class="action-priority p1">P1 立即執行</p>
+        <p class="action-title">啟動互動受眾再行銷</p>
+        <p class="action-body">在 Ads Manager 建立「曾與見證 / 互動貼文互動」的自訂受眾，以私訊諮詢為目標投放，預算建議 NT$2,000–3,000 測試，預期 CPA 可低於 NT$80。</p>
+      </div>
+      <div class="action-card">
+        <p class="action-priority p2">P2 本月內</p>
+        <p class="action-title">擴張私密話題廣告系列</p>
+        <p class="action-body">以「鬆緊喜好」的語氣和格式，再製作 2–3 支私密健康貼文（如：「私密乾澀不是老了才有的事」「第一次做私密雷射，她說⋯⋯」），進行 A/B 測試找出最佳話題角度。</p>
+      </div>
+      <div class="action-card">
+        <p class="action-priority p2">P2 本月內</p>
+        <p class="action-title">生產第二支情感孕產廣告</p>
+        <p class="action-body">以產前敘事的成功格式，製作「產後第一次照鏡子」「剖腹後的那段沉默」等孕產後視角故事貼文，繼續用情感召喚而非療程介紹打動受眾。</p>
+      </div>
+      <div class="action-card">
+        <p class="action-priority p2">P2 本月內</p>
+        <p class="action-title">重整 Reel 廣告目標</p>
+        <p class="action-body">00-Reel 改為以「影片觀看完成率 75%」為主要 KPI，而非私訊諮詢。同時建立 Reel 觀看受眾 → 諮詢廣告的兩段式漏斗，讓 Reel 承擔認知職責，貼文承擔轉換職責。</p>
+      </div>
+      <div class="action-card">
+        <p class="action-priority p3">P3 下月規劃</p>
+        <p class="action-title">建立預防醫學廣告方向</p>
+        <p class="action-body">5月「癌症零期篩查」廣告 CPA NT$124.9 有潛力，但目前只有一支。建議圍繞「預防醫學 × 女性健康管理」開發 3–5 支不同角度的廣告，形成系列，提升此類受眾的覆蓋深度。</p>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  康乃心廣告成效分析報告　近3個月（2026/03–05）+ 5月單月分析　資料來源：Facebook Ads Manager
+</footer>
+
+<script>
+const cpaData = [
+  { label: '「鬆緊喜好」私密話題', cpa: 28.3, spend: 340, n: 12 },
+  { label: '三月女王月', cpa: 41.5, spend: 997, n: 24 },
+  { label: '肉毒品牌怎麼挑', cpa: 70.8, spend: 354, n: 5 },
+  { label: '臨時廣告-私密處不適', cpa: 78.0, spend: 624, n: 8 },
+  { label: '把享受升到最頂', cpa: 108.0, spend: 432, n: 4 },
+  { label: '癌症零期篩查', cpa: 124.9, spend: 1624, n: 13 },
+  { label: '00-Reel 影片廣告', cpa: 126.7, spend: 10138, n: 80 },
+  { label: '閨蜜電波不熟？', cpa: 149.0, spend: 1341, n: 9 },
+  { label: '跟總監做閨蜜電波', cpa: 151.3, spend: 605, n: 4 },
+  { label: 'PicoHi 皮秒雷射體驗', cpa: 172.9, spend: 1729, n: 10 },
+  { label: '更保濕更明亮更緊緻', cpa: 198.2, spend: 991, n: 5 },
+  { label: '看懂閨蜜電波影片', cpa: 198.2, spend: 991, n: 5 },
+  { label: '有些變化不該忍受（廣告）', cpa: 214.6, spend: 1717, n: 8 },
+  { label: '真的假的？', cpa: 216.5, spend: 433, n: 2 },
+  { label: '來～來～別害羞', cpa: 230.3, spend: 1382, n: 6 },
+  { label: '醫美最高等級', cpa: 236.0, spend: 944, n: 4 },
+  { label: '有些變化不該忍受（貼文）', cpa: 311.7, spend: 3429, n: 11 },
+  { label: '母親節禮物推薦', cpa: 329.0, spend: 987, n: 3 },
+  { label: '保養天天擦還不夠', cpa: 432.0, spend: 432, n: 1 },
+  { label: '半小時買一整年安心', cpa: 447.0, spend: 447, n: 1 },
+  { label: '來了來了！（互動）', cpa: 467.0, spend: 467, n: 1 },
+  { label: '棒球應援 Team Taiwan', cpa: 535.5, spend: 1071, n: 2 },
+  { label: '全臉精雕', cpa: 551.0, spend: 551, n: 1 },
+];
+
+const getColor = (cpa) => {
+  if (cpa <= 80) return '#0f7a6e';
+  if (cpa <= 150) return '#2357a8';
+  if (cpa <= 250) return '#b56a10';
+  return '#c0392b';
+};
+
+new Chart(document.getElementById('cpaChart'), {
+  type: 'bar',
+  data: {
+    labels: cpaData.map(d => d.label),
+    datasets: [{
+      data: cpaData.map(d => d.cpa),
+      backgroundColor: cpaData.map(d => getColor(d.cpa)),
+      borderRadius: 4,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          title: ctx => cpaData[ctx[0].dataIndex].label,
+          label: ctx => {
+            const d = cpaData[ctx.dataIndex];
+            return [
+              `每次諮詢成本：NT$${d.cpa.toFixed(1)}`,
+              `廣告花費：NT$${d.spend.toLocaleString()}`,
+              `諮詢次數：${d.n} 次`
+            ];
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: { color: '#8888aa', font: { size: 11 }, callback: v => 'NT$' + v },
+        grid: { color: 'rgba(100,100,160,0.08)' },
+        border: { display: false }
+      },
+      y: {
+        ticks: { color: '#4a4a6a', font: { size: 11 }, autoSkip: false },
+        grid: { display: false },
+        border: { display: false }
+      }
+    }
+  }
+});
+
+const bubbleRaw = [
+  { x: 997, y: 24, r: 22, label: '三月女王月' },
+  { x: 1663, y: 27, r: 24, label: '產前情感敘事' },
+  { x: 10138, y: 80, r: 36, label: '00-Reel' },
+  { x: 340, y: 12, r: 14, label: '私密話題' },
+  { x: 1729, y: 10, r: 12, label: 'PicoHi 皮秒' },
+  { x: 1624, y: 13, r: 13, label: '癌症篩查' },
+  { x: 3429, y: 11, r: 12, label: '忍受變化（貼文）' },
+  { x: 1717, y: 8, r: 10, label: '忍受變化（廣告）' },
+  { x: 1341, y: 9, r: 11, label: '閨蜜電波？' },
+  { x: 987, y: 3, r: 7, label: '母親節' },
+  { x: 1071, y: 2, r: 6, label: '棒球應援' },
+  { x: 354, y: 5, r: 8, label: '肉毒品牌' },
+  { x: 624, y: 8, r: 10, label: '私密不適' },
+];
+
+new Chart(document.getElementById('bubbleChart'), {
+  type: 'bubble',
+  data: {
+    datasets: [{
+      label: '廣告活動',
+      data: bubbleRaw.map(d => ({ x: d.x, y: d.y, r: d.r })),
+      backgroundColor: 'rgba(26,26,46,0.18)',
+      borderColor: '#2357a8',
+      borderWidth: 1.5,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => {
+            const d = bubbleRaw[ctx.dataIndex];
+            return [`${d.label}`, `花費：NT$${d.x.toLocaleString()}`, `諮詢：${d.y} 次`];
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        title: { display: true, text: '廣告花費 (NT$)', color: '#8888aa', font: { size: 11 } },
+        ticks: { color: '#8888aa', font: { size: 11 }, callback: v => 'NT$' + (v/1000).toFixed(0) + 'k' },
+        grid: { color: 'rgba(100,100,160,0.08)' },
+        border: { display: false },
+        min: 0, max: 12000
+      },
+      y: {
+        title: { display: true, text: '諮詢成果數', color: '#8888aa', font: { size: 11 } },
+        ticks: { color: '#8888aa', font: { size: 11 } },
+        grid: { color: 'rgba(100,100,160,0.08)' },
+        border: { display: false },
+        min: 0, max: 95
+      }
+    }
+  }
+});
+
+const mayCpaData = [
+  { label: '「鬆緊喜好」私密話題', cpa: 28.3, spend: 340, n: 12 },
+  { label: '產前情感敘事', cpa: 61.6, spend: 1663, n: 27 },
+  { label: '肉毒品牌怎麼挑', cpa: 70.8, spend: 354, n: 5 },
+  { label: '臨時廣告-私密處不適', cpa: 78.0, spend: 624, n: 8 },
+  { label: '把享受升到最頂', cpa: 108.0, spend: 432, n: 4 },
+  { label: '癌症零期篩查', cpa: 124.9, spend: 1624, n: 13 },
+  { label: '00-Reel 影片廣告', cpa: 126.7, spend: 10138, n: 80 },
+  { label: '閨蜜電波不熟？', cpa: 149.0, spend: 1341, n: 9 },
+  { label: 'PicoHi 皮秒雷射體驗', cpa: 172.9, spend: 1729, n: 10 },
+  { label: '看懂閨蜜電波影片', cpa: 198.2, spend: 991, n: 5 },
+  { label: '真的假的？', cpa: 216.5, spend: 433, n: 2 },
+  { label: '醫美最高等級', cpa: 236.0, spend: 944, n: 4 },
+  { label: '保養天天擦還不夠', cpa: 432.0, spend: 432, n: 1 },
+  { label: '半小時買一整年安心', cpa: 447.0, spend: 447, n: 1 },
+  { label: '來了來了！', cpa: 467.0, spend: 467, n: 1 },
+];
+
+new Chart(document.getElementById('mayCpaChart'), {
+  type: 'bar',
+  data: {
+    labels: mayCpaData.map(d => d.label),
+    datasets: [{
+      data: mayCpaData.map(d => d.cpa),
+      backgroundColor: mayCpaData.map(d => getColor(d.cpa)),
+      borderRadius: 4,
+      borderSkipped: false,
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          title: ctx => mayCpaData[ctx[0].dataIndex].label,
+          label: ctx => {
+            const d = mayCpaData[ctx.dataIndex];
+            return [
+              `每次諮詢成本：NT$${d.cpa.toFixed(1)}`,
+              `廣告花費：NT$${d.spend.toLocaleString()}`,
+              `諮詢次數：${d.n} 次`
+            ];
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: { color: '#8888aa', font: { size: 11 }, callback: v => 'NT$' + v },
+        grid: { color: 'rgba(100,100,160,0.08)' },
+        border: { display: false }
+      },
+      y: {
+        ticks: { color: '#4a4a6a', font: { size: 11 }, autoSkip: false },
+        grid: { display: false },
+        border: { display: false }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
